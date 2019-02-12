@@ -1,5 +1,8 @@
+'use strict'
 
-module.exports = {
+const fs = require("fs");
+
+const dataOps = {
   convertDataInputTypes: (commodityMap) => {
     // All data conversions go here
     commodityMap["FIXED_OVERHEAD"] = parseFloat(commodityMap["FIXED_OVERHEAD"])
@@ -14,12 +17,22 @@ module.exports = {
 
   calculateTotalCost: (variableCost, fixedCost, price, volume) => {
     const totalCost = ((price + variableCost) * volume) + fixedCost
-    return roundToPrice(totalCost)
+    return dataOps.roundToPrice(totalCost)
   },
 
-  formatOutput(country, totalCost, price, variableCost, volume, fixedCost) {
+  formatOutput(entry, price, volume) {
+    let country = entry["COUNTRY"]
+    let totalCost = entry["TOTAL_COST"]
+    let fixedCost = entry["FIXED_OVERHEAD"]
+    let variableCost = entry["VARIABLE_OVERHEAD"]
     return `${country} ${totalCost.toFixed(2)} | (${price + variableCost} * ${volume}) + ${fixedCost}`
   },
 
-  sortOutput(curr, prev, parameter) { return curr[parameter] > prev[parameter] }
+  sortOutput(curr, prev, parameter) { return curr[parameter] > prev[parameter] },
+
+  loadFile(path) {
+    return JSON.parse(fs.readFileSync('./thirdPartyData.json', 'utf8')); 
+  }
 }
+
+module.exports = dataOps
