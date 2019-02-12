@@ -15,3 +15,5 @@ Now you're ready to run - type into your console:
 fruitpal <fruit> <price> <volume>
 ```
 And you should see results if your commodity is available in the `thirdPartyData.json` file.
+## Testing
+Run the unit tests with `npm test`
